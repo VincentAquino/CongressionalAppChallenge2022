@@ -1,0 +1,600 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css">
+        <style>
+            .container{
+                text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+				width: 60%;
+            }
+            .container h2{
+                color: black;
+            }
+            .container h3{
+                color: black;
+                opacity: 0.5;
+            }
+            .container button{
+                margin-top: 30px;
+                color: black;
+                background-color: cornflowerblue;
+                font-size: 25px;
+                padding: 20px;
+                border-radius: 10px;
+                border: none;
+                transition: 0.5s;
+                opacity: 0;
+            }
+            .container button:hover{
+                cursor: pointer;
+                font-size: 30px;
+            }
+
+            #buttonContainer{
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                height: 90vh;
+            }
+            #buttonContainer button{
+                width: 50px;
+                height: 50px;
+                border-radius: 10px;
+                background-color: slategrey;
+                border: 5px solid black;
+                transition: 0.1s;
+            }
+
+            #cameraBox{
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                width: 324px;
+                height: 244px;
+                color: black;
+                background-color: slategray;
+                border-right: 7px solid black;
+                border-bottom: 7px solid black;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                flex-direction: column;
+            }
+
+			#imageContainer{
+                text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+			#imageContainer2{
+                text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+			#timer{
+				position: absolute;
+				left: 50%;
+				top: 0%;
+				transform: translate(-50%, 0);
+				color: black;
+				display: none;
+				z-index: 3;
+				background-color: cornflowerblue;
+				padding: 20px;
+			}
+
+            #testResults{
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                height: 80%;
+                display: table;
+                visibility:hidden;
+            }
+            .box{
+                width: 50%;
+                height: 50%;
+                text-align: center;
+                float: left;
+            }
+            #predResults{
+                display: table-cell;
+                vertical-align: middle;
+            }
+            #testResults li{
+                list-style: none;
+                font-size: 30px;
+
+            }
+            #imageResults{
+                background-color: black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+            .text{
+                position: absolute;
+                left: 75%;
+                top: 50%;
+                transform: translate(-50%,-50%);
+            }
+            .boxs{
+                position: relative;
+                width: 100%;
+            }
+            .boxs h2{
+                font-size: 25px;
+            }
+            .boxs a{
+                font-size: 25px;
+                padding: 10px;
+                border-radius: 10px;
+                margin-top: 20px;
+                margin-left: 5px;
+                margin-right: 5px;
+                text-decoration: none;
+                color: cornflowerblue;
+                border: 3px solid cornflowerblue;
+                transition: 0.5s;
+                display: inline-block;
+            }
+            .boxs a:hover{
+                font-size: 30px;
+                border: none;
+                text-decoration: underline;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Eye Tracking Scripts -->
+		<script src="node_modules/heatmap.js/build/heatmap.js"></script>
+        <script src="https://webgazer.cs.brown.edu/webgazer.js?" defer></script>
+        <script src="eyetracker.js" defer></script>
+		<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+        <script src="http://hongru.github.io/proj/canvas2image/canvas2image.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+        <!-- Container For All of The Buttons -->
+        <div id="buttonContainer">
+            <button class="position-absolute top-0 start-50 translate-middle" id="button1"></button>
+            <button class="position-absolute top-0 start-100 translate-middle" id="button2"></button>
+            <button class="position-absolute top-50 start-100 translate-middle" id="button3"></button>
+            <button class="position-absolute top-100 start-100 translate-middle" id="button4"></button>
+            <button class="position-absolute top-100 start-50 translate-middle" id="button5"></button>
+            <button class="position-absolute top-50 start-0 translate-middle" id="button6"></button>
+            <button class="position-absolute top-100 start-0 translate-middle" id="button7"></button>
+
+            <!-- Script to change colors of buttons once clicked -->
+            <script>
+				count1 = 0;
+                var imageString;
+				// Create Variables and Generates Random Image
+                window.onload = function(){
+                    for(var i = 1; i < 8; i++){
+                        strings = "button"+i;
+                        window["button"+i] = document.getElementById(strings) ;
+                        window["count"+i] = 0;
+                    }
+					var number = Math.floor(Math.random() * 300) + 1;
+					imageString = "./Images/" + number + ".png";
+					var img = document.getElementById('imgId');
+					img.src = imageString;
+					img.style.zIndex = "-1";
+					var img2 = document.getElementById('imgId2');
+					img2.src = imageString;
+                }
+				// Changes color when button clicked
+                button1.onclick = function(){
+                    if(count1 == 6){
+                            count1 += 1;
+                            button1.style.backgroundColor = "green";
+                    }
+                    if(count1 == 5){
+                            count1 += 1;
+                            button1.style.backgroundColor = "#9acd32";
+                    }
+                    if(count1 == 4){
+                            count1 += 1;
+                            button1.style.backgroundColor = "yellow";
+                    }
+                    if(count1 == 3){
+                            count1 += 1;
+                            button1.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count1 == 2){
+                            count1 += 1;
+                            button1.style.backgroundColor = "orange";
+                    }
+                    if(count1 == 1){
+                            count1 += 1;
+                            button1.style.backgroundColor = "#FF5349";
+                    }
+                    if(count1 == 0){
+                            count1 += 1;
+                            button1.style.backgroundColor = "red";
+                    }
+                }
+                button2.onclick = function(){
+                    if(count2 == 6){
+                            count2 += 1;
+                            button2.style.backgroundColor = "green";
+                    }
+                    if(count2 == 5){
+                            count2 += 1;
+                            button2.style.backgroundColor = "#9acd32";
+                    }
+                    if(count2 == 4){
+                            count2 += 1;
+                            button2.style.backgroundColor = "yellow";
+                    }
+                    if(count2 == 3){
+                            count2 += 1;
+                            button2.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count2 == 2){
+                            count2 += 1;
+                            button2.style.backgroundColor = "orange";
+                    }
+                    if(count2 == 1){
+                            count2 += 1;
+                            button2.style.backgroundColor = "#FF5349";
+                    }
+                    if(count2 == 0){
+                            count2 += 1;
+                            button2.style.backgroundColor = "red";
+                    }
+                }
+                button3.onclick = function(){
+                    if(count3 == 6){
+                            count3 += 1;
+                            button3.style.backgroundColor = "green";
+                    }
+                    if(count3 == 5){
+                            count3 += 1;
+                            button3.style.backgroundColor = "#9acd32";
+                    }
+                    if(count3 == 4){
+                            count3 += 1;
+                            button3.style.backgroundColor = "yellow";
+                    }
+                    if(count3 == 3){
+                            count3 += 1;
+                            button3.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count3 == 2){
+                            count3 += 1;
+                            button3.style.backgroundColor = "orange";
+                    }
+                    if(count3 == 1){
+                            count3 += 1;
+                            button3.style.backgroundColor = "#FF5349";
+                    }
+                    if(count3 == 0){
+                            count3 += 1;
+                            button3.style.backgroundColor = "red";
+                    }
+                }
+                button4.onclick = function(){
+                    if(count4 == 6){
+                            count4 += 1;
+                            button4.style.backgroundColor = "green";
+                    }
+                    if(count4 == 5){
+                            count4 += 1;
+                            button4.style.backgroundColor = "#9acd32";
+                    }
+                    if(count4 == 4){
+                            count4 += 1;
+                            button4.style.backgroundColor = "yellow";
+                    }
+                    if(count4 == 3){
+                            count4 += 1;
+                            button4.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count4 == 2){
+                            count4 += 1;
+                            button4.style.backgroundColor = "orange";
+                    }
+                    if(count4 == 1){
+                            count4 += 1;
+                            button4.style.backgroundColor = "#FF5349";
+                    }
+                    if(count4 == 0){
+                            count4 += 1;
+                            button4.style.backgroundColor = "red";
+                    }
+                }
+                button5.onclick = function(){
+                    if(count5 == 6){
+                            count5 += 1;
+                            button5.style.backgroundColor = "green";
+                    }
+                    if(count5 == 5){
+                            count5 += 1;
+                            button5.style.backgroundColor = "#9acd32";
+                    }
+                    if(count5 == 4){
+                            count5 += 1;
+                            button5.style.backgroundColor = "yellow";
+                    }
+                    if(count5 == 3){
+                            count5 += 1;
+                            button5.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count5 == 2){
+                            count5 += 1;
+                            button5.style.backgroundColor = "orange";
+                    }
+                    if(count5 == 1){
+                            count5 += 1;
+                            button5.style.backgroundColor = "#FF5349";
+                    }
+                    if(count5 == 0){
+                            count5 += 1;
+                            button5.style.backgroundColor = "red";
+                    }
+                }
+                button6.onclick = function(){
+                    if(count6 == 6){
+                            count6 += 1;
+                            button6.style.backgroundColor = "green";
+                    }
+                    if(count6 == 5){
+                            count6 += 1;
+                            button6.style.backgroundColor = "#9acd32";
+                    }
+                    if(count6 == 4){
+                            count6 += 1;
+                            button6.style.backgroundColor = "yellow";
+                    }
+                    if(count6 == 3){
+                            count6 += 1;
+                            button6.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count6 == 2){
+                            count6 += 1;
+                            button6.style.backgroundColor = "orange";
+                    }
+                    if(count6 == 1){
+                            count6 += 1;
+                            button6.style.backgroundColor = "#FF5349";
+                    }
+                    if(count6 == 0){
+                            count6 += 1;
+                            button6.style.backgroundColor = "red";
+                    }
+                }
+                button7.onclick = function(){
+                    if(count7 == 6){
+                        count7 += 1;
+                        button7.style.backgroundColor = "green";
+                    }
+                    if(count7 == 5){
+                        count7 += 1;
+                        button7.style.backgroundColor = "#9acd32";
+                    }
+                    if(count7 == 4){
+                        count7 += 1;
+                        button7.style.backgroundColor = "yellow";
+                    }
+                    if(count7 == 3){
+                        count7 += 1;
+                        button7.style.backgroundColor = "#f5bd1f";
+                    }
+                    if(count7 == 2){
+                        count7 += 1;
+                        button7.style.backgroundColor = "orange";
+                    }
+                    if(count7 == 1){
+                        count7 += 1;
+                        button7.style.backgroundColor = "#FF5349";
+                    }
+                    if(count7 == 0){
+                        count7 += 1;
+                        button7.style.backgroundColor = "red";
+                    }
+                }
+                // Checks if all buttons are green
+				// Resizes image container, heatmap canvas, and image itself
+                var imgWidth;
+                var imgHeight;
+				var check = setInterval(function(){
+                    if(count1 >= 6 && count2 >= 6 && count3 >= 6 && count4 >= 6 && count5 >= 6 && count6 >= 6){
+                        document.getElementById("startBtn").style.opacity = 1;
+                    }
+					var image = document.getElementById("imgId");
+					imgWidth = image.width || image.naturalWidth;
+					imgHeight = image.height || image.naturalHeight;
+					document.getElementById("imageContainer").style.width = imgWidth;
+					document.getElementById("imageContainer").style.height = imgHeight;
+					document.getElementById("imageContainer2").style.width = imgWidth;
+					document.getElementById("imageContainer2").style.height = imgHeight;
+                }, 10);
+            </script>
+        </div>
+
+        <!-- Camera Box -->
+        <div id="cameraBox">
+            <h2>Please wait for Camera to load</h2>
+        </div>
+
+        <!-- Directions -->
+        <div id="container" class="container">
+            <h2>To get started with the test, please click on the boxes on the edges 7 times. This will help callibrate the AI program to see where you are looking.</h2>
+            <h3>*Make sure to look at your cursor as you click on the buttons*</h3>
+            <h3>*The boxes should turn dark green once you click it the proper amount of times*</h3>
+            <h3>*Once you click all of the boxes, click the START button to begin the test*</h3>
+            <button onclick="startTest()" id="startBtn">Start Test</button>
+        </div>
+
+		<!-- Image Generation -->
+		<div id="imageContainer" style="display: none; width: 800px; height: 400px;">
+			<img id="imgId">
+		</div>
+		<div id="imageContainer2" style="display: none; width: 800px; height: 400px; z-index:1">
+			<img id="imgId2">
+		</div>
+		<h1 id="timer">Time: 5s</h1>
+
+        <!-- Results -->
+        <div id="testResults">
+            <div id="imageResults" class="box"></div>
+            <div id="predResults" class="box">
+                <div class="text">
+                    <h1>Accuracy Results</h1>
+                    <ul>
+                        <li id="austismResults">Autism: 0%</li>
+                        <li id="typicallyDevResults">Typically Devloping: 0%</li>
+                    </ul>
+                    <div class="boxs" id="warningBox" style="display: none;">
+                        <h1 style="color: red;">Oh No!!</h1>
+                        <h2>Our AI model has found that you have a high chance of having autism!</h2>
+                        <h2 style="text-decoration: underline;">We recommend to:</h2>
+                        <h2>- Retest yourself with our app to see if this is a fluke</h2>
+                        <h2>- If the same results repeatedly happen, please schedule an appointment with a doctor or talk to a professional!</h2>
+                        <a href="index.html">Home</a>
+                        <a href="app.html">Redo Test</a>
+                    </div>
+                    <div class="boxs" id="mehBox" style="display: none;">
+                        <h1 style="color: goldenrod;">Oh No</h1>
+                        <h2>Our AI model has found that you have a medium chance of having autism!</h2>
+                        <h2 style="text-decoration: underline;">We recommend to:</h2>
+                        <h2>- Retest yourself with our app to see if this is a fluke</h2>
+                        <h2>- If the same results repeatedly happen, you are likely developing autism.</h2>
+                        <a href="index.html">Home</a>
+                        <a href="app.html">Redo Test</a>
+                    </div>
+                    <div class="boxs" id="goodBox" style="display: none;">
+                        <h1 style="color: forestgreen;">Hooray!</h1>
+                        <h2>Our AI model has found that you have a low chance of having autism!</h2>
+                        <h2 style="text-decoration: underline;">We recommend to:</h2>
+                        <h2>- Retest yourself with our app to see if this is a fluke</h2>
+                        <h2>- If the same results repeatedly happens, you likely don't have autism!</h2>
+                        <a href="index.html">Home</a>
+                        <a href="app.html">Redo Test</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<!-- Test Directions -->
+		<div id="testContainer" class="container" style="display: none;">
+            <h2>Welcome to the Autism Test</h2>
+			<h3>*Thank you for callibrating your eye movements*</h3>
+            <h3>*This test will simply show 1 image for a few seconds and track your eye movements*</h3>
+            <h3>*The calculation process may take a few minutes*</h3>
+            <h3>*Once ready, click the button below to start the test*</h3>
+            <button onclick="startImageTest()" id="startBtn2" style="opacity: 1;">Start Test</button>
+        </div>
+
+		<!-- Script to start and check the test -->
+        <script>
+			var startedTest = false;
+			var time = 5;
+			var timer = document.getElementById("timer");
+			function startTest(){
+				document.getElementById("container").style.display = "none";
+				document.getElementById("buttonContainer").style.display = "none";
+				document.getElementById("testContainer").style.display = "block";
+			}
+			function startImageTest(){
+				document.getElementById("timer").style.display = "block";
+				document.getElementById("testContainer").style.display = "none";
+				document.getElementById("imageContainer").style.display = "block";
+				document.getElementById("imageContainer2").style.display = "block";
+				startedTest = true;
+				var timers = setInterval(function(){
+					time -= 1;
+					timer.innerHTML = "Time: " + time + "s";
+					if(time <= 0){
+						document.getElementById("imageContainer2").style.display = "none";
+						document.getElementById("imageContainer").style.display = "none";
+						document.getElementById("imageContainer").style.zIndex = "2";
+                        document.getElementById("testResults").style.visibility = "visible";
+						webgazer.pause();
+                        document.getElementById("webgazerVideoContainer").style.display = "none";
+                        document.getElementById("cameraBox").style.display = "none";
+						timer.innerHTML = "Results";
+
+						//screenshot the image
+                        himage = document.createElement("img");
+						let heatmapCanvas = document.querySelector(".heatmap-canvas");
+						var heatmapPicture = heatmapCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                        himage.src = heatmapPicture;
+
+                        //put image into model
+                        var warning = document.getElementById("warningBox");
+                        var meh = document.getElementById("mehBox");
+                        var good = document.getElementById("goodBox");
+                        var a = 0;
+                        var td = 0;
+
+                        let model;
+                        var pred;
+                        $( document ).ready(async function () {
+                            console.log( "Loading model..." );
+                            model = await tf.loadGraphModel('model/model.json');
+                            console.log( "Model loaded." );
+                            let image = heatmapCanvas;
+                            let tensor = tf.browser.fromPixels(image)
+                                .resizeNearestNeighbor([224,224]) // change the image size
+                                .expandDims()
+                                .toFloat()
+                                .reverse(-1); // RGB -> BGR
+                            let predictions = await model.predict(tensor).data();
+                            console.log(predictions);
+                            let top5 = Array.from(predictions)
+                                .map(function (p, i) { // this is Array.map
+                                    pred = p*100;
+                                    pred = pred.toFixed(2);
+                                    if(i == 1){
+                                        document.getElementById("austismResults").innerHTML = "Autism: " + pred + "%";
+                                        a = pred;
+                                    }
+                                    if(i == 0){
+                                        document.getElementById("typicallyDevResults").innerHTML = "Typically Developing: " + pred + "%";
+                                        td = pred;
+                                    }
+                                })
+                                if(a >= 60){
+                                    warning.style.display = "block";
+                                    meh.style.display = "none";
+                                    good.style.display = "none";
+                                }
+                                if(a < 60 && a > 40){
+                                    warning.style.display = "none";
+                                    meh.style.display = "block";
+                                    good.style.display = "none";
+                                }
+                                if(a <= 40){
+                                    warning.style.display = "none";
+                                    meh.style.display = "none";
+                                    good.style.display = "block";
+                                }
+                        });
+
+                        document.getElementById("imageResults").appendChild(himage);
+
+						clearInterval(timers);
+					}
+				}, 1000);
+			}
+        </script>
+    </body>
+</html>

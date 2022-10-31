@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "bson": "^4.7.0",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "fs": "^0.0.1-security",
+    "heatmap.js": "^2.0.5",
+    "lite-server": "^2.6.1",
+    "mongodb": "^4.10.0",
+    "mongoose": "^6.6.2"
+  },
+  "name": "congressional-app-challenge",
+  "version": "1.0.0",
+  "main": "eyetracker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

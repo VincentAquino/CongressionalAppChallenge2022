@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            .content{
+                width: 100%;
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                text-align: center;
+            }
+            .title{
+                margin-bottom: 30px;
+                margin-top: 30px;
+                background-color: cornflowerblue;
+                display: table;
+                position: relative; 
+                left: 50%;
+                transform: translate(-50%,0);
+                padding: 20px;
+                border-radius: 20px;
+            }
+            #open{
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                margin: 20px;
+                border: none;
+                background-color: cornflowerblue;
+                font-size: 30px;
+                padding: 10px;
+                border-radius: 10px;
+                transition: 1s;
+            }
+            #sidebar{
+                width: 15%;
+                height: 100vh;
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                background-color: cornflowerblue;
+                text-align: center;
+                transform: translate(-100%,0);
+                transition: 1s;
+                z-index: 3;
+            }
+            #sidebar h1 a{
+                color: black;
+                text-decoration: none;
+                transition: 0.5s;
+            }
+            #sidebar h1 a:hover{
+                font-size: 45px;
+            }
+            #sidebar h2 a{
+                font-size: 30px;
+                color: white;
+                transition: 0.5s;
+                text-decoration: none;
+                margin: 20px;
+            }
+            #sidebar h2 a:hover{
+                font-size: 35px;
+                border: none;
+                text-decoration: underline;
+                margin-bottom: 10px;
+            }
+            #sidebar h1{
+                margin: 40px;
+            }
+            #content h2{
+                position: relative;
+                left: 50%;
+                transform: translate(-50%, 0);
+                width: 75%;
+                text-align: left;
+                color: cornflowerblue;
+                text-decoration: underline;
+            }
+            #content h3{
+                text-align: left;
+                font-size: 30px;
+                width: 75%;
+                position: relative;
+                left: 50%;
+                transform: translate(-50%, 0);
+            }
+            #content h3 a{
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="open" onclick="openSidebar()"><i class="fa fa-bars"></i></button>
+        <div id="sidebar">
+            <h1><a href="index.html">Name</a></h1>
+            <h2><a href="app.html">App!</a></h2>
+            <br>
+            <h2><a href="about.html">About</a></h2>
+            <br>
+            <h2><a href="learn.html">Learn</a></h2>
+            <br>
+            <h2><a href="directions.html">App Info</a></h2>
+        </div>
+        <script>
+            var openBtn = document.getElementById("open");
+            var sidebar = document.getElementById("sidebar");
+            var open = false; 
+            function openSidebar(){
+                if(open == false){
+                    open = true;
+                    openBtn.style.left = "15%";
+                    sidebar.style.transform = "translate(0%,0)";
+                    openBtn.innerHTML = "<i class='fa fa-close'></i>";
+                    return;
+                }
+                if(open == true){
+                    open = false;
+                    openBtn.style.left = "0%";
+                    sidebar.style.transform = "translate(-100%,0)";
+                    openBtn.innerHTML = "<i class='fa fa-bars'></i>";
+                    return;
+                }
+            }
+        </script>
+        
+        <div id="content">
+            <h1 class="title">About Us</h1>
+            
+        </div>
+    </body>
+</html>

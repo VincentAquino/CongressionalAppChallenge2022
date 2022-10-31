@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            .content{
+                width: 100%;
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                text-align: center;
+            }
+            .title{
+                margin-bottom: 30px;
+                margin-top: 30px;
+                background-color: cornflowerblue;
+                display: table;
+                position: relative; 
+                left: 50%;
+                transform: translate(-50%,0);
+                padding: 20px;
+                border-radius: 20px;
+            }
+            #open{
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                margin: 20px;
+                border: none;
+                background-color: cornflowerblue;
+                font-size: 30px;
+                padding: 10px;
+                border-radius: 10px;
+                transition: 1s;
+            }
+            #sidebar{
+                width: 15%;
+                height: 100vh;
+                position: absolute;
+                left: 0%;
+                top: 0%;
+                background-color: cornflowerblue;
+                text-align: center;
+                transform: translate(-100%,0);
+                transition: 1s;
+                z-index: 3;
+            }
+            #sidebar h1 a{
+                color: black;
+                text-decoration: none;
+                transition: 0.5s;
+            }
+            #sidebar h1 a:hover{
+                font-size: 45px;
+            }
+            #sidebar h2 a{
+                font-size: 30px;
+                color: white;
+                transition: 0.5s;
+                text-decoration: none;
+                margin: 20px;
+            }
+            #sidebar h2 a:hover{
+                font-size: 35px;
+                border: none;
+                text-decoration: underline;
+                margin-bottom: 10px;
+            }
+            #sidebar h1{
+                margin: 40px;
+            }
+            #content h2{
+                position: relative;
+                left: 50%;
+                transform: translate(-50%, 0);
+                width: 75%;
+                text-align: left;
+                color: cornflowerblue;
+                text-decoration: underline;
+            }
+            #content h3{
+                text-align: left;
+                font-size: 30px;
+                width: 75%;
+                position: relative;
+                left: 50%;
+                transform: translate(-50%, 0);
+            }
+            #content h3 a{
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="open" onclick="openSidebar()"><i class="fa fa-bars"></i></button>
+        <div id="sidebar">
+            <h1><a href="index.html">Name</a></h1>
+            <h2><a href="app.html">App!</a></h2>
+            <br>
+            <h2><a href="about.html">About</a></h2>
+            <br>
+            <h2><a href="learn.html">Learn</a></h2>
+            <br>
+            <h2><a href="directions.html">App Info</a></h2>
+        </div>
+        <script>
+            var openBtn = document.getElementById("open");
+            var sidebar = document.getElementById("sidebar");
+            var open = false; 
+            function openSidebar(){
+                if(open == false){
+                    open = true;
+                    openBtn.style.left = "15%";
+                    sidebar.style.transform = "translate(0%,0)";
+                    openBtn.innerHTML = "<i class='fa fa-close'></i>";
+                    return;
+                }
+                if(open == true){
+                    open = false;
+                    openBtn.style.left = "0%";
+                    sidebar.style.transform = "translate(-100%,0)";
+                    openBtn.innerHTML = "<i class='fa fa-bars'></i>";
+                    return;
+                }
+            }
+        </script>
+        
+        <div id="content">
+            <h1 class="title">App Info</h1>
+            <h2>Purpose</h2>
+            <h3>The purpose of our app is to provide a cheaper and shorter eye test for people who possibly have autism.</h3>
+            <br>
+            <h3>Current autism eye tests:</h3>
+            <h3>- Take between 30 and 60 minutes</h3>
+            <h3>- Can cost up to $1000 - $2000</h3>
+            <h3>- Take 1.5-4 hours for results</h3>
+            <br>
+            <h3>Our project is <span style="color: cornflowerblue;">free to use</span>, and takes 
+            <span style="color: cornflowerblue;">only a few minutes</span> to complete the test and get your results back.</h3>
+            <br>
+            <h2>How to Use</h2>
+            <h3>1) On one of our web pages, click the app link and you will get redirected to a new page.</h3>
+            <h3>2) Once the red dot starts moving, simply click on the boxes around the screen until the color is green. This will calibrate the camera and track your eye movements.</h3>
+            <h3>3) After all of the buttons turn green, click on the middle <span style="color: cornflowerblue;">START</span> button.</h3>
+            <h3>4) Read the instructions on the next page and click <span style="color: cornflowerblue;">START</span> once your ready.</h3>
+            <h3>5) After 5 seconds, your test will be complete and your eye tracking data will be put into our AI machine learning model.</h3>
+            <h3>6) Wait a few seconds and you should be able to see your test results as well as a few recommendations for the future!</h3>
+            <h3>7) Feel free to do this eye tracking test a few times!</h3>
+            <br>
+            <h2>Project Resources</h2>
+            <h3><a href="https://webgazer.cs.brown.edu/">Webgazer.js</a></h3>
+            <h3><a href="https://www.patrick-wied.at/static/heatmapjs/">Heatmap.js</a></h3>
+            <h3><a href="https://getbootstrap.com/">Bootstrap</a></h3>
+            <h3><a>HTML, CSS, JavaScript</a></h3>
+            <br>
+            <br>
+        </div>
+    </body>
+</html>
